@@ -15,8 +15,10 @@ database.initialize = function () {
 
 database.createShortUrl = function (request, response) {
     db.get("SELECT * FROM url_counter", function(err, row) {
-        var currentCounter = row.counter
+        var currentCounter = row.counter;
         var shortId = utils.encode(currentCounter);
+        console.log(shortId);
+        console.log(utils.decode(shortId));
         var updatedUrlCounter = currentCounter + 1;
         var url = request.query.url;
         var platform = request.query.platform;
