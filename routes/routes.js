@@ -4,7 +4,7 @@ var appRouter = function(app, utils) {
 
     // handle HTTP GET request to shorten a url.
     app.get('/shorten', function (req, res) {
-       database.createShortUrl(req, res)
+       database.createShortUrl(request.query.url, request.query.platform, res)
     });
 
     // handle HTTP GET request to display all short urls.
