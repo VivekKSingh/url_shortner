@@ -37,7 +37,7 @@ database.getOriginalUrl = function (request, response) {
 database.getAllShortUrls = function (response) {
     db.all("SELECT * FROM urls", function(err, rows) {
         if (rows.length > 0) {
-            response.send(JSON.stringify(rows));
+            response.json(rows);
         } else {
             response.redirect("/")
         }
@@ -47,9 +47,9 @@ database.getAllShortUrls = function (response) {
 function getShortUrl(url, platform, response) {
     db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row) {
         if (row == undefined) {
-            response.send("Sorry, no short url exists for this url.");
+            response.json( { success: false } );
         } else {
-            response.send("The short url is: " + createShortUrlString(row.short_id));
+            response.json( { success: true, "shortUrl": createShortUrlString(row.short_id)} );
         }
     });
 };
@@ -61,12 +61,12 @@ function insertUrl(urlCounter, url, platform, shortId, response) {
                 if (err == null ) {
                    updateUrlCounter(urlCounter);
                 } else {
-                   response.send("Sorry, there was some error creating short url.")
+                   response.json({ success: false})
                 }
             });
             getShortUrl(url, platform, response);
         } else {
-            response.send("The short url is: " + createShortUrlString(row.short_id));
+            response.json({success: true, "shortUrl": createShortUrlString(row.short_id)});
         }
     })
 };

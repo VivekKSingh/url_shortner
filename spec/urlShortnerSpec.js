@@ -1,13 +1,22 @@
 var request = require("request");
 var utils = require("../libs/utils.js");
-var base_url = "http://localhost:3000/"
+var config = require("../libs/config.js")
+var base_url = config.webhost + ":" + config.webport
 
-describe("Hello World Server", function() {
+describe("Url Shortner", function() {
   describe("GET /", function() {
     it("returns status code 200", function() {
       request.get(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(200);
       });
+    });
+  });
+
+  describe("GET /shorten", function() {
+    it("returns a shortened url", function() {
+        request.get(base_url, function(error, response, body) {
+            expect(response).toBe();
+        });
     });
   });
 });

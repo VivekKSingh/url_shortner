@@ -6,7 +6,6 @@
   "author": "VivekKumar Singh",
   "license": "ISC",
   "scripts": {
-    "start": "nodemon app.js",
     "test": "./node_modules/.bin/jasmine-node spec"
   },
   "dependencies": {
