@@ -1,3 +1,7 @@
+/*
+    Routes for API endpoints.
+*/
+
 var database = require("../libs/db.js");
 
 var appRouter = function(app, utils) {

@@ -8,6 +8,7 @@ var db = require("../libs/db.js");
 frisby.create('GET back short url from a url')
   .get('http://localhost:5656/shorten?url=http://google.com&platform=desktop')
   .after(function(err, res, body) {
+      // Get request to a short url leads to its long url.
       frisby.create('Redirect to original url when provided a short url')
         .get('http://localhost:5656/cLs', {followRedirect: false})
         .expectStatus(302)

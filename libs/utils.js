@@ -1,3 +1,7 @@
+/*
+    Utility functions for the application.
+*/
+
 var utils = module.exports = {};
 
 var seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("")
