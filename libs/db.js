@@ -30,6 +30,12 @@ database.getOriginalUrl = function (request) {
     });
 }
 
+database.logTable = function() {
+    db.each("SELECT * FROM urls", function(err, row) {
+        console.log(row.id + ": " + row.short_id + ": " + row.url);
+    });
+};
+
 function getShortUrl(url, platform, response) {
     db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row) {
         response.send("The short url is: " + row.short_id);
@@ -52,8 +58,3 @@ function updateUrlCounter(updatedCounter) {
     db.run("UPDATE url_counter SET counter = ?", updatedCounter);
 };
 
-database.logTable = function() {
-    db.each("SELECT * FROM urls", function(err, row) {
-        console.log(row.id + ": " + row.short_id + ": " + row.url);
-    });
-};

@@ -3,12 +3,32 @@
     <head>
         <meta charset="UTF-8">
         <title>Url Shortner</title>
+        <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="styles/simple-grid.min.css" />
     </head>
     <body>
-        <form action="http://127.0.0.1:3000/shorten" method="GET">
-            Url: <input type="text" name="url">  <br>
-            Platform: <input type="text" name="platform">
-            <input type="submit" value="Submit">
-        </form>
+        <div class="container">
+            <div class="row">
+                <div class="3">
+                    1
+                </div>
+                2
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <form action="http://127.0.0.1:3000/shorten" method="GET">
+                        Url: <input type="text" name="url">  <br>
+                        Platform: <input type="text" name="platform">
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="3">
+                    2
+                </div>
+                2
+            </div>
+        </div>
     </body>
 </html>
