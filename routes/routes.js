@@ -7,11 +7,11 @@ var appRouter = function(app, utils) {
     });
 
     app.get('/get/allShortUrls', function(req, res) {
-        database.logTable();
+       database.logTable();
     })
 
     app.get('/:shortId', function(req, res){
-        database.getOriginalUrl(req);
+       database.getOriginalUrl(req);
     });
 }
 
