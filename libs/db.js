@@ -2,6 +2,7 @@ var sqlLite = require('sqlite3').verbose(),
     db = new sqlLite.Database(':memory:'),
     INITIAL_COUNTER = 10000,
     utils = require('../libs/utils.js'),
+    config = require('../libs/config.js'),
     database = module.exports = {};
 
 
@@ -17,8 +18,6 @@ database.createShortUrl = function (request, response) {
     db.get("SELECT * FROM url_counter", function(err, row) {
         var currentCounter = row.counter;
         var shortId = utils.encode(currentCounter);
-        console.log(shortId);
-        console.log(utils.decode(shortId));
         var updatedUrlCounter = currentCounter + 1;
         var url = request.query.url;
         var platform = request.query.platform;
@@ -26,9 +25,13 @@ database.createShortUrl = function (request, response) {
     });
 };
 
-database.getOriginalUrl = function (request) {
+database.getOriginalUrl = function (request, response) {
     db.get("SELECT * FROM urls WHERE short_id = ?", [request.params.shortId], function(err, row) {
-        response.redirect(row.url);
+        if(row == undefined) {
+            response.redirect("/")
+        } else {
+            response.redirect(row.url);
+        }
     });
 }
 
@@ -40,7 +43,11 @@ database.logTable = function() {
 
 function getShortUrl(url, platform, response) {
     db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row) {
-        response.send("The short url is: " + row.short_id);
+        if (row == undefined) {
+            response.send("Sorry, no short url exists for this url.");
+        } else {
+            response.send("The short url is: " + createShortUrlString(row.short_id));
+        }
     });
 }
 
@@ -51,7 +58,7 @@ function insertUrl(urlCounter, url, platform, shortId, response) {
             updateUrlCounter(urlCounter);
             getShortUrl(url, platform, response);
         } else {
-            response.send("The short url is: " + "http://localhost:3000/" + row.short_id);
+            response.send("The short url is: " + createShortUrlString(row.short_id));
         }
     })
 };
@@ -60,3 +67,6 @@ function updateUrlCounter(updatedCounter) {
     db.run("UPDATE url_counter SET counter = ?", updatedCounter);
 };
 
+function createShortUrlString(shortId) {
+    return config.webhost + ":" + config.webport + "/" + shortId;
+}

@@ -11,7 +11,7 @@ var appRouter = function(app, utils) {
     })
 
     app.get('/:shortId', function(req, res){
-       database.getOriginalUrl(req);
+       database.getOriginalUrl(req, res);
     });
 }
 
