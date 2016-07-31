@@ -7,14 +7,15 @@ var db = require("../libs/db.js");
 // Long url sent to the /shorten endpoint returns a short url.
 frisby.create('GET back short url from a url')
   .get('http://localhost:5656/shorten?url=http://google.com&platform=desktop')
+  .after(function(err, res, body) {
+      frisby.create('Redirect to original url when provided a short url')
+        .get('http://localhost:5656/cLs', {followRedirect: false})
+        .expectStatus(302)
+        .expectHeaderContains('location', "http://google.com")
+      .toss()
+   })
   .expectStatus(200)
-  .expectJSON({ success: true, shortUrl: "http://localhost:5656/cL7"})
-.toss();
-
-// Short url navigates to the original url.
-frisby.create('Redirect to original url when provided a short url')
-  .get('http://localhost:5656/cL7')
-  .expectStatus(200)
+  .expectJSON({ success: true, shortUrl: "http://localhost:5656/cLs"})
 .toss();
 
 // Test for decode and encode utility functions for creating short urls.
