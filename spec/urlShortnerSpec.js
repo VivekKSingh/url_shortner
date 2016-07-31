@@ -12,13 +12,11 @@ describe("Hello World Server", function() {
   });
 });
 
-describe("Utils", function() {
-  describe("Decode", function() {
-    it("returns original number", function() {
-      var originalNumber = 1000;
-      var resultString = utils.encode(originalNumber);
-      var decodedNumber = utils.decode(resultString);
-      expect(decodedNumber).toBe(originalNumber);
+describe("Decode", function() {
+    it("returns original number after decoding", function() {
+        var originalNumber = 10001;
+        var resultString = utils.encode(originalNumber);
+        var decodedNumber = utils.decode(resultString);
+        expect(decodedNumber).toBe(originalNumber);
     });
-  });
 });

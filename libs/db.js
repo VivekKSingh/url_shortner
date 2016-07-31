@@ -1,6 +1,5 @@
 var sqlLite = require('sqlite3').verbose(),
     db = new sqlLite.Database(':memory:'),
-    INITIAL_COUNTER = 10000,
     utils = require('../libs/utils.js'),
     config = require('../libs/config.js'),
     database = module.exports = {};
@@ -10,7 +9,7 @@ database.initialize = function () {
    db.serialize(function() {
        db.run("CREATE TABLE urls (id INTEGER, url TEXT, platform TEXT, short_id TEXT)");
        db.run("CREATE TABLE url_counter (counter INTEGER)");
-       db.run("INSERT INTO url_counter VALUES (?)", INITIAL_COUNTER);
+       db.run("INSERT INTO url_counter VALUES (?)", config.initialCounter);
    });
 };
 
@@ -33,13 +32,17 @@ database.getOriginalUrl = function (request, response) {
             response.redirect(row.url);
         }
     });
-}
-
-database.logTable = function() {
-    db.each("SELECT * FROM urls", function(err, row) {
-        console.log(row.id + ": " + row.short_id + ": " + row.url);
-    });
 };
+
+database.getAllShortUrls = function (response) {
+    db.all("SELECT * FROM urls", function(err, rows) {
+        if (rows.length > 0) {
+            response.send(JSON.stringify(rows));
+        } else {
+            response.redirect("/")
+        }
+    });
+}
 
 function getShortUrl(url, platform, response) {
     db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row) {
@@ -49,13 +52,18 @@ function getShortUrl(url, platform, response) {
             response.send("The short url is: " + createShortUrlString(row.short_id));
         }
     });
-}
+};
 
 function insertUrl(urlCounter, url, platform, shortId, response) {
-    db.run("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row){
+    db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row){
         if (row == undefined) {
-            db.run("INSERT INTO urls VALUES (?, ?, ?, ?)", urlCounter, url, platform, shortId);
-            updateUrlCounter(urlCounter);
+            db.run("INSERT INTO urls VALUES (?, ?, ?, ?)", [urlCounter, url, platform, shortId], function (err) {
+                if (err == null ) {
+                   updateUrlCounter(urlCounter);
+                } else {
+                   response.send("Sorry, there was some error creating short url.")
+                }
+            });
             getShortUrl(url, platform, response);
         } else {
             response.send("The short url is: " + createShortUrlString(row.short_id));
@@ -69,4 +77,4 @@ function updateUrlCounter(updatedCounter) {
 
 function createShortUrlString(shortId) {
     return config.webhost + ":" + config.webport + "/" + shortId;
-}
+};

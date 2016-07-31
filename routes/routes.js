@@ -6,8 +6,8 @@ var appRouter = function(app, utils) {
        database.createShortUrl(req, res)
     });
 
-    app.get('/get/allShortUrls', function(req, res) {
-       database.logTable();
+    app.get('/all/shorturls', function(req, res) {
+       database.getAllShortUrls(res);
     })
 
     app.get('/:shortId', function(req, res){

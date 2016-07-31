@@ -1,4 +1,5 @@
-var config = module.exports = {}
-
-config.webhost = "http://localhost";
-config.webport = 5656;
+var config = module.exports = {
+    "webhost": "http://localhost",
+    "webport": 5656,
+    "initialCounter": 10000
+};
