@@ -7,6 +7,7 @@ var utils = module.exports = {};
 var seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("")
 var base = seed.length
 
+// Function to encode a number and generate a shortId
 utils.encode = function(input) {
     if (input === 0) { return seed[0]; }
     var encodedString = ''
@@ -17,6 +18,7 @@ utils.encode = function(input) {
     return encodedString.split("").reverse().join("")
 }
 
+// Function to decode a shortId string and get back the original number.
 utils.decode = function (inputString) {
     var decodedString = 0;
     while (inputString){

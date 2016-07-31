@@ -1,8 +1,5 @@
-var request = require("request");
 var frisby = require('frisby');
 var utils = require("../libs/utils.js");
-var config = require("../libs/config.js");
-var db = require("../libs/db.js");
 
 // Long url sent to the /shorten endpoint returns a short url.
 frisby.create('GET back short url from a url')
