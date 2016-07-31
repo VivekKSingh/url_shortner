@@ -9,7 +9,9 @@
     "start": "nodemon app.js",
     "test": "./node_modules/.bin/jasmine-node spec"
   },
-  "devDependencies": {
+  "dependencies": {
+    "jasmine-node": "^1.14.5",
+    "sqlite3": "^3.1.4",
     "async": "~1.4.2",
     "body-parser": "^1.13.3",
     "express": "~4.13.3",
@@ -18,9 +20,5 @@
     "lodash": "^3.10.1",
     "nodemon": "^1.4.1",
     "request": "^2.60.0"
-  },
-  "dependencies": {
-    "jasmine-node": "^1.14.5",
-    "sqlite3": "^3.1.4"
   }
 }
