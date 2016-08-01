@@ -17,6 +17,8 @@ To run jasmine tests:
 
 ```
 npm test
+
+Note: Please run "node app.js" and run the application first to run the tests. I did not have time to configure a test runner like karma to make this independent. 
 ```
 
 How to use:
