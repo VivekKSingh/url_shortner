@@ -45,3 +45,5 @@ http://localhost:5656/<shortId>
 
 eg: http://localhost:5656/cLs
 ```
+Note: The short urls can have any fancy domains once they are hosted on a server and domain registered for this application
+But for now this runs on your local machine hence the "localhost" :)
