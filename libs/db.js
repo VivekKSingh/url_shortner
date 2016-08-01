@@ -25,7 +25,7 @@ database.createShortUrl = function (url, platform, response) {
         var updatedUrlCounter = currentCounter + 1;
         var shortId = utils.encode(updatedUrlCounter);
         var shortUrl = createShortUrlString(shortId);
-        if (validator.isURL(url)) {
+        if (validator.isURL(url.trim())) {
             insertUrl(updatedUrlCounter, url, platform, shortUrl, response);
         } else {
             response.json( { success: false, message: "Invalid url provided" } );
