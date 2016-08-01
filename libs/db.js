@@ -21,8 +21,8 @@ database.initialize = function () {
 database.createShortUrl = function (url, platform, response) {
     db.get("SELECT * FROM url_counter", function(err, row) {
         var currentCounter = row.counter;
-        var shortId = utils.encode(currentCounter);
         var updatedUrlCounter = currentCounter + 1;
+        var shortId = utils.encode(updatedUrlCounter);
         var shortUrl = createShortUrlString(shortId)
         insertUrl(updatedUrlCounter, url, platform, shortUrl, response);
     });
@@ -31,6 +31,7 @@ database.createShortUrl = function (url, platform, response) {
 // Redirects to original url by looking up on the short url else redirects to home page.
 database.getOriginalUrl = function (shortId, response) {
     var id = utils.decode(shortId)
+    console.log(id);
     db.get("SELECT * FROM urls WHERE id = ?", id, function(err, row) {
         if(row == undefined) {
             response.redirect("/")

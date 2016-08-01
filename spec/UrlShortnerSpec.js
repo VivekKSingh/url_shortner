@@ -7,13 +7,13 @@ frisby.create('GET back short url from a url')
   .after(function(err, res, body) {
       // Get request to a short url leads to its long url.
       frisby.create('Redirect to original url when provided a short url')
-        .get('http://localhost:5656/cLs', {followRedirect: false})
+        .get('http://localhost:5656/cLt', {followRedirect: false})
         .expectStatus(302)
         .expectHeaderContains('location', "http://google.com")
       .toss()
    })
   .expectStatus(200)
-  .expectJSON({ success: true, shortUrl: "http://localhost:5656/cLs"})
+  .expectJSON({ success: true, shortUrl: "http://localhost:5656/cLt"})
 .toss();
 
 // Test for decode and encode utility functions for creating short urls.
