@@ -6,6 +6,7 @@
   "author": "VivekKumar Singh",
   "license": "ISC",
   "scripts": {
+    "start": "node app.js",
     "test": "./node_modules/.bin/jasmine-node spec"
   },
   "repository": {
