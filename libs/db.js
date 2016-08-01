@@ -6,6 +6,7 @@ var sqlLite = require('sqlite3').verbose(),
     db = new sqlLite.Database(':memory:'),
     utils = require('../libs/utils.js'),
     config = require('../libs/config.js'),
+    validator = require('validator'),
     database = module.exports = {};
 
 // Initializes the database with required tables and initial data.
@@ -23,8 +24,12 @@ database.createShortUrl = function (url, platform, response) {
         var currentCounter = row.counter;
         var updatedUrlCounter = currentCounter + 1;
         var shortId = utils.encode(updatedUrlCounter);
-        var shortUrl = createShortUrlString(shortId)
-        insertUrl(updatedUrlCounter, url, platform, shortUrl, response);
+        var shortUrl = createShortUrlString(shortId);
+        if (validator.isURL(url)) {
+            insertUrl(updatedUrlCounter, url, platform, shortUrl, response);
+        } else {
+            response.json( { success: false, message: "Invalid url provided" } );
+        }
     });
 };
 
@@ -55,7 +60,7 @@ database.getAllShortUrls = function (response) {
 function getShortUrl(id, response) {
     db.get("SELECT * FROM urls WHERE id = ?", id, function(err, row) {
         if (row == undefined) {
-            response.json( { success: false } );
+            response.json( { success: false, message: "Could not find short url" } );
         } else {
             response.json( { success: true, "shortUrl": row.short_url} );
         }
@@ -70,7 +75,7 @@ function insertUrl(urlCounter, url, platform, shortUrl, response) {
                 if (err == null) {
                    updateUrlCounter(urlCounter);
                 } else {
-                   response.json({ success: false})
+                   response.json({ success: false, message: "Could not insert url"})
                 }
             });
             getShortUrl(urlCounter, response);
