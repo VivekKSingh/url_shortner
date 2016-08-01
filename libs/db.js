@@ -31,7 +31,6 @@ database.createShortUrl = function (url, platform, response) {
 // Redirects to original url by looking up on the short url else redirects to home page.
 database.getOriginalUrl = function (shortId, response) {
     var id = utils.decode(shortId)
-    console.log(id);
     db.get("SELECT * FROM urls WHERE id = ?", id, function(err, row) {
         if(row == undefined) {
             response.redirect("/")
