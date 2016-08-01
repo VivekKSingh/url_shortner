@@ -16,6 +16,20 @@ frisby.create('GET back short url from a url')
   .expectJSON({ success: true, shortUrl: "http://localhost:5656/cLt"})
 .toss();
 
+// Return error when invalid url provided.
+frisby.create('GET error when invalid url provided to shorten')
+  .get('http://localhost:5656/shorten?url=http:/google.&platform=desktop')
+  .expectStatus(200)
+  .expectJSON({ success: false, message: "Invalid url provided" })
+.toss();
+
+// Return to the home page if invalid short url provided.
+frisby.create('Redirect to home page if invalid short url provided.')
+    .get('http://localhost:5656/c', {followRedirect: false})
+    .expectStatus(302)
+    .expectHeaderContains('location', "/")
+.toss()
+
 // Test for decode and encode utility functions for creating short urls.
 describe("Decode", function() {
     it("returns original number after decoding", function() {
