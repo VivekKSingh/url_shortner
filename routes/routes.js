@@ -18,7 +18,7 @@ var appRouter = function(app, utils) {
 
     // handle HTTP GET request to redirect a short url to its original url.
     app.get('/:shortId', function(req, res){
-       database.getOriginalUrl(req, res);
+       database.getOriginalUrl(req.params.shortId, res);
     });
 }
 

@@ -11,7 +11,7 @@ var sqlLite = require('sqlite3').verbose(),
 // Initializes the database with required tables and initial data.
 database.initialize = function () {
    db.serialize(function() {
-       db.run("CREATE TABLE urls (id INTEGER, url TEXT, platform TEXT, short_id TEXT)");
+       db.run("CREATE TABLE urls (id INTEGER, url TEXT, platform TEXT, short_url TEXT)");
        db.run("CREATE TABLE url_counter (counter INTEGER)");
        db.run("INSERT INTO url_counter VALUES (?)", config.initialCounter);
    });
@@ -23,13 +23,15 @@ database.createShortUrl = function (url, platform, response) {
         var currentCounter = row.counter;
         var shortId = utils.encode(currentCounter);
         var updatedUrlCounter = currentCounter + 1;
-        insertUrl(updatedUrlCounter, url, platform, shortId, response);
+        var shortUrl = createShortUrlString(shortId)
+        insertUrl(updatedUrlCounter, url, platform, shortUrl, response);
     });
 };
 
 // Redirects to original url by looking up on the short url else redirects to home page.
-database.getOriginalUrl = function (request, response) {
-    db.get("SELECT * FROM urls WHERE short_id = ?", [request.params.shortId], function(err, row) {
+database.getOriginalUrl = function (shortId, response) {
+    var id = utils.decode(shortId)
+    db.get("SELECT * FROM urls WHERE id = ?", id, function(err, row) {
         if(row == undefined) {
             response.redirect("/")
         } else {
@@ -50,30 +52,30 @@ database.getAllShortUrls = function (response) {
 }
 
 // Returns shortUrl if one exists for the url and platform combination.
-function getShortUrl(url, platform, response) {
-    db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row) {
+function getShortUrl(id, response) {
+    db.get("SELECT * FROM urls WHERE id = ?", id, function(err, row) {
         if (row == undefined) {
             response.json( { success: false } );
         } else {
-            response.json( { success: true, "shortUrl": createShortUrlString(row.short_id)} );
+            response.json( { success: true, "shortUrl": row.short_url} );
         }
     });
 };
 
 // Inserts a url into the urls table if does not exist else returns existing shortUrl.
-function insertUrl(urlCounter, url, platform, shortId, response) {
+function insertUrl(urlCounter, url, platform, shortUrl, response) {
     db.get("SELECT * FROM urls WHERE url = ? AND platform = ?", [url, platform], function(err, row){
         if (row == undefined) {
-            db.run("INSERT INTO urls VALUES (?, ?, ?, ?)", [urlCounter, url, platform, shortId], function (err) {
-                if (err == null ) {
+            db.run("INSERT INTO urls VALUES (?, ?, ?, ?)", [urlCounter, url, platform, shortUrl], function (err) {
+                if (err == null) {
                    updateUrlCounter(urlCounter);
                 } else {
                    response.json({ success: false})
                 }
             });
-            getShortUrl(url, platform, response);
+            getShortUrl(urlCounter, response);
         } else {
-            response.json({success: true, "shortUrl": createShortUrlString(row.short_id)});
+            response.json({success: true, "shortUrl": row.short_url});
         }
     })
 };
