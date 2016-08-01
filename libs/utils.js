@@ -20,11 +20,11 @@ utils.encode = function(input) {
 
 // Function to decode a shortId string and get back the original number.
 utils.decode = function (inputString) {
-    var decodedString = 0;
+    var decoded = 0;
     while (inputString){
         var index = seed.indexOf(inputString[0]);
-        decodedString += index * (Math.pow(base, inputString.length - 1));
+        decoded += index * (Math.pow(base, inputString.length - 1));
         inputString = inputString.substring(1);
     }
-    return decodedString;
+    return decoded;
 }
